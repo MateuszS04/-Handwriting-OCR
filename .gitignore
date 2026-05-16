@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv-kraken/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+
+# Project artifacts (data is large; keep .gitkeep only)
+data/pages/*
+data/lines/*
+data/gt_reviewed/*
+data/splits/*
+data/line_images/*
+data/line_images_reviewed/*
+data/lines_merged/*
+data/debug/*
+data/pages_rest/*
+data/pages_clean/*
+!data/**/.gitkeep
+
+# Model checkpoints / logs
+checkpoints/
+runs/
+wandb/
+outputs/
+*.ckpt
+*.pt
+*.bin
+*.safetensors
+
+# Source PDFs of articles are kept; raw scans are not committed
+Listy/
+
+2508.11499v1.pdf
+2602.14524v1.pdf

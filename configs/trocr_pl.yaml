@@ -1,0 +1,76 @@
+# --- Data ---
+data:
+  lines_dir: data/lines
+  splits_dir: data/splits           # expects train.jsonl / val.jsonl / test.jsonl
+  gt_jsonl: data/gt_raw/gemini.jsonl
+  reviewed_jsonl: data/gt_reviewed/reviewed.jsonl   # optional, weighted higher
+  min_confidence: 0.0               # drop Gemini lines below this score
+  max_target_length: 128
+
+# --- Splits (used by `dataset.py build_splits`) ---
+split:
+  by: page                          # "page" -> stratify by document, no leakage
+  train: 0.8
+  val:   0.1
+  test:  0.1
+  seed:  42
+
+# # --- Model ---
+# model:
+#   base_checkpoint: microsoft/trocr-large-handwritten
+#   # extra characters appended to the tokenizer if not already present
+#   extra_chars: ["ą", "ć", "ę", "ł", "ń", "ó", "ś", "ź", "ż",
+#                 "Ą", "Ć", "Ę", "Ł", "Ń", "Ó", "Ś", "Ź", "Ż"]
+#   freeze_encoder_epochs: 1          # freeze ViT for the first N epochs
+
+# # --- Augmentation (training split only) ---
+# augment:
+#   enabled: true
+#   elastic: true                     # best single aug in 2508.11499
+#   affine_deg: 2.0
+#   shear_deg: 2.0
+#   scale_jitter: 0.05
+#   morphology: true                  # erosion/dilation w/ 1-2px kernel
+#   blur_p: 0.2
+#   noise_p: 0.2
+#   brightness_contrast: 0.10
+
+# # --- Optimization ---
+# train:
+#   output_dir: checkpoints/trocr-pl
+#   num_epochs: 15
+#   per_device_train_batch_size: 8
+#   per_device_eval_batch_size: 16
+#   gradient_accumulation_steps: 4    # effective batch ~32
+#   learning_rate: 4.0e-5             # encoder LR
+#   decoder_lr: 1.0e-4                # decoder LR (separate param group)
+#   weight_decay: 0.01
+#   warmup_steps: 500
+#   lr_scheduler_type: linear
+#   label_smoothing: 0.1
+#   precision: bf16                   # one of: bf16 | fp16 | fp32
+#   eval_strategy: steps
+#   eval_steps: 500
+#   save_strategy: steps
+#   save_steps: 500
+#   save_total_limit: 3
+#   logging_steps: 50
+#   load_best_model_at_end: true
+#   metric_for_best_model: cer
+#   greater_is_better: false
+#   early_stopping_patience: 4
+#   reviewed_sample_weight: 2.0       # upweight human-reviewed examples
+#   seed: 42
+
+# # --- Generation (used at eval/inference time) ---
+# generation:
+#   num_beams: 4
+#   max_length: 128
+#   early_stopping: true
+#   no_repeat_ngram_size: 0
+#   length_penalty: 1.0
+
+# # --- Logging ---
+# logging:
+#   use_wandb: false
+#   run_name: trocr-pl-baseline

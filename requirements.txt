@@ -1,0 +1,39 @@
+# --- Core ML stack ---
+torch>=2.3
+torchvision>=0.18
+transformers>=4.44
+accelerate>=0.33
+datasets>=2.20
+evaluate>=0.4.2
+jiwer>=3.0
+sentencepiece>=0.2.0
+safetensors>=0.4.3
+
+# --- Image / document processing ---
+Pillow>=10.3
+opencv-python-headless>=4.10
+scikit-image>=0.24
+numpy>=1.26
+pdf2image>=1.17
+pymupdf>=1.24            # fitz, fast PDF rasterization (alternative to pdf2image)
+
+# --- Line segmentation ---
+# Kraken pulls in a lot; install separately if you only want labeling/training.
+# kraken>=5.2
+
+# --- Augmentation ---
+albumentations>=1.4
+
+# --- Ground-truth via Gemini ---
+google-genai>=0.3.0
+python-dotenv>=1.0.1
+tenacity>=8.5            # retries for API calls
+
+# --- Training UX ---
+tqdm>=4.66
+PyYAML>=6.0
+wandb>=0.17              # optional, can be disabled in the config
+
+# --- Dev / notebooks ---
+jupyterlab>=4.2
+matplotlib>=3.9
