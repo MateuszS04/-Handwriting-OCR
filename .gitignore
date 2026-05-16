@@ -15,6 +15,7 @@ env/
 .ipynb_checkpoints/
 .venv-kraken/
 
+
 # Env / secrets
 .env
 .env.*
@@ -29,6 +30,7 @@ Thumbs.db
 .vscode/
 
 # Project artifacts (data is large; keep .gitkeep only)
+/data/gt_raw/*
 data/pages/*
 data/lines/*
 data/gt_reviewed/*

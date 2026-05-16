@@ -212,11 +212,17 @@ Use these overlays to check whether:
 - ascenders/descenders are not clipped,
 - neighboring lines are not merged.
 
-## 6. Transcribe Lines With Gemini + Page Context
+## 6. Transcribe Lines With Gemini In Page Batches
 
-This step sends each full page to Gemini first, saves the rough page
-transcription, then sends each line crop with that page transcription as
-context.
+This step sends **one request per page** to reduce API-question usage. Each
+request contains:
+
+- the full page image,
+- all cropped line images from that page,
+- a manifest with line numbers and relative file paths.
+
+Gemini returns one rough page transcription plus one transcription per line
+crop. The script writes the page transcription and all line records locally.
 
 Small test run:
 
@@ -271,12 +277,12 @@ Line record example:
   "text": "Kochana Stefciu ...",
   "confidence": 0.91,
   "model": "gemini-2.5-flash",
-  "prompt_version": "page-context-v1"
+  "prompt_version": "page-batch-v1"
 }
 ```
 
-The script is resumable. It saves after every line and skips already-labeled
-`file` entries unless you pass `--overwrite`.
+The script is resumable. It saves after every page batch and skips already
+labeled `file` entries unless you pass `--overwrite`.
 
 ## 7. Create Training Manifests
 
@@ -371,8 +377,8 @@ python -m src.geminilabel.connect_transcripts \
 - Gemini labels are bootstrap ground truth. Review a subset manually before
   treating them as final labels.
 - Gemini may silently normalize spelling or guess uncertain words. This is why
-  the page-context prompt asks it to preserve original spelling and use the line
-  image as the source of truth.
+  the page-batch prompt asks it to preserve original spelling and use each line
+  crop as the source of truth.
 - For TrOCR, keep line images RGB/grayscale-like. Avoid hard binarization unless
   you run an experiment proving it helps your data.
 - If segmentation looks wrong, inspect overlay images before tuning parameters.
